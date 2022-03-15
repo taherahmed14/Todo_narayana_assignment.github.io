@@ -24,9 +24,10 @@ function App() {
   const getTodos = async () => {
     try{
         dispatch(getTodoLoading());
-        const data = await fetch("http://localhost:3001/todos")
+        const data = await fetch("https://taherahmed14.github.io/Todo_data/db.json")
         .then((d) => d.json());
-        dispatch(getTodoSuccess(data));
+        console.log(data.todos);
+        dispatch(getTodoSuccess(data.todos));
     }
     catch(err){
         dispatch(getTodoError(err));
@@ -38,7 +39,7 @@ const handleSubmit = (e) => {
     e.preventDefault();
 
     dispatch(addTodoLoading());
-    fetch("http://localhost:3001/todos", {
+    fetch("https://taherahmed14.github.io/Todo_data/db.json", {
         method: "POST",
         headers: {
             "Content-Type":"application/json"

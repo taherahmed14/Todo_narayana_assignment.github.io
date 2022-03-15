@@ -1,4 +1,3 @@
-import { useState } from "react";
 import "../App.css";
 
 export const Todo = ({ todo, text, handleCompleted, handleDelete }) => {
@@ -14,10 +13,10 @@ export const Todo = ({ todo, text, handleCompleted, handleDelete }) => {
                 </div>
                 <div>
                     <button onClick={() => {handleCompleted(todo.id)}}>
-                        <img src="https://img.icons8.com/dotty/80/000000/task-completed.png"/>
+                        <img src="https://img.icons8.com/dotty/80/000000/task-completed.png" alt="completed" />
                     </button>
                     <button onClick={() => {handleDelete(todo.id)}}>
-                        <img src="https://img.icons8.com/wired/64/000000/filled-trash.png"/>
+                        <img src="https://img.icons8.com/wired/64/000000/filled-trash.png" alt="delete" />
                     </button>
                 </div>
             </div>
