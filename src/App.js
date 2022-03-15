@@ -6,7 +6,8 @@ import { Navbar } from './components/navbar';
 import { Pending } from './components/pending_page';
 import { TodoPage } from './components/todo_page';
 import { useSelector, useDispatch } from 'react-redux';
-import { getTodoLoading, getTodoSuccess, getTodoError, addTodoLoading, addTodoSuccess, addTodoError } from './features/action';
+import { getTodoLoading, getTodoSuccess, getTodoError, addTodoLoading, addTodoSuccess, addTodoError,
+  deleteTodoLoading, deleteTodoSuccess, deleteTodoError, updateTodoLoading, updateTodoError } from './features/action';
 
 function App() {
   const [inputText, setInputText] = useState("");
@@ -66,14 +67,59 @@ const handleSubmit = (e) => {
     }
 }
 
+  const handleDelete = (id) => {
+    dispatch(deleteTodoLoading());
+    fetch(`https://todo-server-nar.herokuapp.com/todos/${id}`, {
+        method: "DELETE"
+    })
+    .then((d) => d.json())
+    .then((res) => {
+        getTodos();
+    })
+    .catch((err) => {
+        dispatch(deleteTodoError(err))
+        console.log(err);
+    });
+  }
+
+  const toggleStatus = (id, text, currentStatus) => {
+    dispatch(updateTodoLoading());
+    fetch(`https://todo-server-nar.herokuapp.com/todos/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type":"application/json"
+        },
+        body: JSON.stringify({
+            id,
+            text,
+            status: currentStatus,
+            todoDate,
+            todoTime
+        })
+    })
+    .then((d) => d.json())
+    .then((res) => {
+        console.log(res);
+        getTodos();
+    })
+    .catch((err) => {
+        dispatch(updateTodoError(err));
+    });
+  }
+
   return (
     <div className="App">
       <Navbar />
       <Routes>
         <Route path='/' element={<TodoPage inputText={inputText} setInputText={setInputText} todoTime={todoTime} setTodoTime={setTodoTime}
-          todoDate={todoDate} setTodoDate={setTodoDate} todos={todos} getTodos={getTodos} handleSubmit={handleSubmit} />}></Route>
-        <Route path='/todos/completed' element={<Completed todos={todos} todoDate={todoDate} todoTime={todoTime} />} ></Route>
-        <Route path='/todos/pending' element={<Pending todos={todos} todoDate={todoDate} todoTime={todoTime} />} ></Route>
+          todoDate={todoDate} setTodoDate={setTodoDate} todos={todos} getTodos={getTodos} handleSubmit={handleSubmit}
+          handleDelete={handleDelete} toggleStatus={toggleStatus} />}></Route>
+        <Route path='/todos/completed' element={<Completed todos={todos} todoDate={todoDate} todoTime={todoTime} handleDelete={handleDelete} 
+          toggleStatus={toggleStatus}/>}>
+        </Route>
+        <Route path='/todos/pending' element={<Pending todos={todos} todoDate={todoDate} todoTime={todoTime} handleDelete={handleDelete} 
+          toggleStatus={toggleStatus}/>}>
+        </Route>
       </Routes>
     </div>
   );

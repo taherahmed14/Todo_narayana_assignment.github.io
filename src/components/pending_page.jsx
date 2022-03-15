@@ -1,72 +1,13 @@
 import { useState, useEffect } from "react";
 import { Todos } from "./todos";
-import { getTodoLoading, getTodoSuccess, getTodoError, deleteTodoLoading, deleteTodoSuccess, deleteTodoError, 
-    updateTodoLoading, updateTodoSuccess, updateTodoError } from '../features/action';
-import { useDispatch } from 'react-redux';
 
-export const Pending = ({ todos, setTodos, todoDate, todoTime }) => {
+export const Pending = ({ todos, handleDelete, toggleStatus }) => {
 
     const [filterTodo, setFilterTodo] = useState([]);
-    const dispatch = useDispatch();
 
     useEffect(() => {
         getPending();
     }, [todos]);
-
-    const getTodos = async () => {
-        try{
-            dispatch(getTodoLoading());
-            const data = await fetch("https://todo-server-nar.herokuapp.com/todos")
-            .then((d) => d.json());
-            dispatch(getTodoSuccess(data));
-        }
-        catch(err){
-            dispatch(getTodoError(err));
-            console.log(err);
-        }
-    }
-
-    const handleDelete = (id) => {
-        dispatch(deleteTodoLoading());
-        fetch(`https://todo-server-nar.herokuapp.com/todos/${id}`, {
-            method: "DELETE"
-        })
-        .then((d) => d.json())
-        .then((res) => {
-            dispatch(deleteTodoSuccess(res));
-            getTodos();
-        })
-        .catch((err) => {
-            dispatch(deleteTodoError(err))
-            console.log(err);
-        });
-    }
-
-    const toggleStatus = (id, text, currentStatus) => {
-        dispatch(updateTodoLoading());
-        fetch(`https://todo-server-nar.herokuapp.com/todos/${id}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type":"application/json"
-            },
-            body: JSON.stringify({
-                id,
-                text,
-                status: currentStatus,
-                todoDate,
-                todoTime
-            })
-        })
-        .then((d) => d.json())
-        .then((res) => {
-            console.log(res);
-            dispatch(updateTodoSuccess(res));
-            getTodos();
-        })
-        .catch((err) => {
-            dispatch(updateTodoError(err));
-        });
-    }
 
     const handleCompleted = (id) => {
         let currentStatus;
