@@ -4,7 +4,7 @@ import { getTodoLoading, getTodoSuccess, getTodoError, deleteTodoLoading, delete
     updateTodoLoading, updateTodoSuccess, updateTodoError } from '../features/action';
 import { useDispatch } from 'react-redux';
 
-export const Completed = ({ todos, setTodos }) => {
+export const Completed = ({ todos, setTodos, todoDate, todoTime }) => {
 
     const [filterTodo, setFilterTodo] = useState([]);
     const dispatch = useDispatch();
@@ -16,7 +16,7 @@ export const Completed = ({ todos, setTodos }) => {
     const getTodos = async () => {
         try{
             dispatch(getTodoLoading());
-            const data = await fetch("http://localhost:3001/todos")
+            const data = await fetch("https://todo-server-nar.herokuapp.com/todos")
             .then((d) => d.json());
             dispatch(getTodoSuccess(data));
         }
@@ -28,7 +28,7 @@ export const Completed = ({ todos, setTodos }) => {
 
     const handleDelete = (id) => {
         dispatch(deleteTodoLoading());
-        fetch(`http://localhost:3001/todos/${id}`, {
+        fetch(`https://todo-server-nar.herokuapp.com/todos/${id}`, {
             method: "DELETE"
         })
         .then((d) => d.json())
@@ -44,7 +44,7 @@ export const Completed = ({ todos, setTodos }) => {
 
     const toggleStatus = (id, text, currentStatus) => {
         dispatch(updateTodoLoading());
-        fetch(`http://localhost:3001/todos/${id}`, {
+        fetch(`https://todo-server-nar.herokuapp.com/todos/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type":"application/json"
@@ -53,6 +53,8 @@ export const Completed = ({ todos, setTodos }) => {
                 id,
                 text,
                 status: currentStatus,
+                todoDate,
+                todoTime
             })
         })
         .then((d) => d.json())

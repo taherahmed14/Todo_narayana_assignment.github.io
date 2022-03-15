@@ -14,7 +14,7 @@ export const TodoPage = ({ inputText, setInputText, todos, setTodos, getTodos, h
 
     const handleDelete = (id) => {
         dispatch(deleteTodoLoading());
-        fetch(`http://localhost:3001/todos/${id}`, {
+        fetch(`https://todo-server-nar.herokuapp.com/todos/${id}`, {
             method: "DELETE"
         })
         .then((d) => d.json())
@@ -29,7 +29,7 @@ export const TodoPage = ({ inputText, setInputText, todos, setTodos, getTodos, h
 
     const toggleStatus = (id, text, currentStatus) => {
         dispatch(updateTodoLoading());
-        fetch(`http://localhost:3001/todos/${id}`, {
+        fetch(`https://todo-server-nar.herokuapp.com/todos/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type":"application/json"

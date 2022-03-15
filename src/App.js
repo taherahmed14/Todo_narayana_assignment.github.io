@@ -24,7 +24,7 @@ function App() {
   const getTodos = async () => {
     try{
         dispatch(getTodoLoading());
-        const data = await fetch("http://localhost:3001/todos")
+        const data = await fetch("https://todo-server-nar.herokuapp.com/todos")
         .then((d) => d.json());
         dispatch(getTodoSuccess(data));
     }
@@ -42,7 +42,7 @@ const handleSubmit = (e) => {
     
     else {
       dispatch(addTodoLoading());
-      fetch("http://localhost:3001/todos", {
+      fetch("https://todo-server-nar.herokuapp.com/todos", {
           method: "POST",
           headers: {
               "Content-Type":"application/json"
@@ -72,8 +72,8 @@ const handleSubmit = (e) => {
       <Routes>
         <Route path='/' element={<TodoPage inputText={inputText} setInputText={setInputText} todoTime={todoTime} setTodoTime={setTodoTime}
           todoDate={todoDate} setTodoDate={setTodoDate} todos={todos} getTodos={getTodos} handleSubmit={handleSubmit} />}></Route>
-        <Route path='/todos/completed' element={<Completed todos={todos} />} ></Route>
-        <Route path='/todos/pending' element={<Pending todos={todos} />} ></Route>
+        <Route path='/todos/completed' element={<Completed todos={todos} todoDate={todoDate} todoTime={todoTime} />} ></Route>
+        <Route path='/todos/pending' element={<Pending todos={todos} todoDate={todoDate} todoTime={todoTime} />} ></Route>
       </Routes>
     </div>
   );
