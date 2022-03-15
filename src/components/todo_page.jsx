@@ -19,7 +19,6 @@ export const TodoPage = ({ inputText, setInputText, todos, setTodos, getTodos, h
         })
         .then((d) => d.json())
         .then((res) => {
-            dispatch(deleteTodoSuccess(res));
             getTodos();
         })
         .catch((err) => {
@@ -46,7 +45,6 @@ export const TodoPage = ({ inputText, setInputText, todos, setTodos, getTodos, h
         .then((d) => d.json())
         .then((res) => {
             console.log(res);
-            dispatch(updateTodoSuccess(res));
             getTodos();
         })
         .catch((err) => {

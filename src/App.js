@@ -24,10 +24,9 @@ function App() {
   const getTodos = async () => {
     try{
         dispatch(getTodoLoading());
-        const data = await fetch("https://taherahmed14.github.io/Todo_data/db.json")
+        const data = await fetch("http://localhost:3001/todos")
         .then((d) => d.json());
-        console.log(data.todos);
-        dispatch(getTodoSuccess(data.todos));
+        dispatch(getTodoSuccess(data));
     }
     catch(err){
         dispatch(getTodoError(err));
@@ -37,29 +36,34 @@ function App() {
 
 const handleSubmit = (e) => {
     e.preventDefault();
-
-    dispatch(addTodoLoading());
-    fetch("https://taherahmed14.github.io/Todo_data/db.json", {
-        method: "POST",
-        headers: {
-            "Content-Type":"application/json"
-        },
-        body: JSON.stringify({
-            status: false,
-            text: inputText,
-            todoTime,
-            todoDate
-        })
-    })
-    .then((d) => d.json())
-    .then((res) => {
-        dispatch(addTodoSuccess(res));
-        getTodos();
-    })
-    .catch((err) => {
-        dispatch(addTodoError(err))
-        console.log(err);
-    });
+    console.log(todoTime, todoDate);
+    if(todoTime === undefined || todoDate === undefined)
+      alert("Enter Date and Time");
+    
+    else {
+      dispatch(addTodoLoading());
+      fetch("http://localhost:3001/todos", {
+          method: "POST",
+          headers: {
+              "Content-Type":"application/json"
+          },
+          body: JSON.stringify({
+              status: false,
+              text: inputText,
+              todoTime,
+              todoDate
+          })
+      })
+      .then((d) => d.json())
+      .then((res) => {
+          dispatch(addTodoSuccess(res));
+          getTodos();
+      })
+      .catch((err) => {
+          dispatch(addTodoError(err))
+          console.log(err);
+      });
+    }
 }
 
   return (
